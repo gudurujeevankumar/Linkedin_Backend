@@ -11,3 +11,17 @@ def stu_details(request):
     data = f"Roll: {roll}, Name: {name}, Age: {age}"
 
     return HttpResponse(data)
+
+def insert(request):
+    if request.method == 'POST':
+        roll = request.POST.get('roll')
+        name = request.POST.get('name')
+        age = request.POST.get('age')
+        email = request.POST.get('email')
+        branch = request.POST.get('branch')
+
+        return HttpResponse(
+            f"Received -> Roll: {roll}, Name: {name}, Age: {age}, Email: {email}, Branch: {branch}"
+        )
+
+    return render(request, 'insert.html')

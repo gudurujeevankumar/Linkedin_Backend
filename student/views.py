@@ -1,17 +1,8 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import StuDetails
 
-# Create your views here.
-
-def stu_details(request):
-    roll = "22P11A0534"
-    name = "Jeevan Kumar"
-    age = 21
-
-    data = f"Roll: {roll}, Name: {name}, Age: {age}"
-
-    return HttpResponse(data)
+def home(request):
+    return render(request, 'home.html')
 
 def insert(request):
     if request.method == 'POST':
@@ -28,15 +19,26 @@ def insert(request):
             email=email,
             branch=branch
         )
-
         return redirect('all_data')
-    
     return render(request, 'insert.html')
 
-
-
 def all_data(request):
-
     students = StuDetails.objects.all()
-
     return render(request, 'data.html', {'students': students})
+
+def update_stu(request, id):
+    student = get_object_or_404(StuDetails, id=id)
+    if request.method == 'POST':
+        student.roll = request.POST.get('roll')
+        student.name = request.POST.get('name')
+        student.age = request.POST.get('age')
+        student.email = request.POST.get('email')
+        student.branch = request.POST.get('branch')
+        student.save()
+        return redirect('all_data')
+    return render(request, 'update.html', {'student': student})
+
+def delete_stu(request, id):
+    student = get_object_or_404(StuDetails, id=id)
+    student.delete()
+    return redirect('all_data')

@@ -24,7 +24,7 @@ def insert(request):
 
         teacher = TeachDetails(empid=empid, name=name, email=email, subject=subject)
         teacher.save()
-        return redirect('all_teachers')
+        return redirect('teacher:all_teachers')
     return render(request, 'teacher/insert.html')
 
 

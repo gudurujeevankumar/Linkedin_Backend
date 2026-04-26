@@ -11,4 +11,3 @@ def stu_details(request):
     data = f"Roll: {roll}, Name: {name}, Age: {age}"
 
     return HttpResponse(data)
-

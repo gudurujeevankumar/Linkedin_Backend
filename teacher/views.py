@@ -1,19 +1,5 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import TeachDetails
-
-# Create your views here.
-
-
-def teacher_details(request):
-    empid = "EMP001"
-    name = "Dr. John Smith"
-    email = "john.smith@school.edu"
-
-    data = f"Employee ID: {empid}, Name: {name}, Email: {email}"
-
-    return HttpResponse(data)
-
 
 def insert(request):
     if request.method == 'POST':
@@ -22,12 +8,31 @@ def insert(request):
         email = request.POST.get('email')
         subject = request.POST.get('subject')
 
-        teacher = TeachDetails(empid=empid, name=name, email=email, subject=subject)
-        teacher.save()
+        TeachDetails.objects.create(
+            empid=empid,
+            name=name,
+            email=email,
+            subject=subject
+        )
         return redirect('teacher:all_teachers')
     return render(request, 'teacher/insert.html')
-
 
 def all_data(request):
     teachers = TeachDetails.objects.all()
     return render(request, 'teacher/data.html', {'teachers': teachers})
+
+def update_teach(request, id):
+    teacher = get_object_or_404(TeachDetails, id=id)
+    if request.method == 'POST':
+        teacher.empid = request.POST.get('empid')
+        teacher.name = request.POST.get('name')
+        teacher.email = request.POST.get('email')
+        teacher.subject = request.POST.get('subject')
+        teacher.save()
+        return redirect('teacher:all_teachers')
+    return render(request, 'teacher/update.html', {'teacher': teacher})
+
+def delete_teach(request, id):
+    teacher = get_object_or_404(TeachDetails, id=id)
+    teacher.delete()
+    return redirect('teacher:all_teachers')

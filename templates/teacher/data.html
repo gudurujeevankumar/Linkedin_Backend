@@ -1,38 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Teachers</title>
-</head>
-<body>
-    <h2>Teacher Records</h2>
-
-    <table border="1" cellpadding="10" cellspacing="0">
-        <thead>
-            <tr>
-                <th>Employee ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Subject</th>
-                <th>Update</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for teacher in teachers %}
-            <tr>
-                <td>{{ teacher.empid }}</td>
-                <td>{{ teacher.name }}</td>
-                <td>{{ teacher.email }}</td>
-                <td>{{ teacher.subject }}</td>
-                <td><a href="#">Edit</a></td>
-                <td><a href="#">Delete</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <a href="{% url 'teacher:insert' %}">Add New Teacher</a>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<div class="fade-in">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2 style="color: var(--secondary);">Teacher Faculty</h2>
+        <a href="{% url 'teacher:insert' %}" class="btn" style="background: var(--secondary); color: white;">+ Add Teacher</a>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead><tr><th>Emp ID</th><th>Name</th><th>Email</th><th>Subject</th><th>Actions</th></tr></thead>
+            <tbody>
+                {% for teacher in teachers %}
+                <tr>
+                    <td>{{ teacher.empid }}</td><td>{{ teacher.name }}</td><td>{{ teacher.email }}</td><td>{{ teacher.subject }}</td>
+                    <td class="actions">
+                        <a href="{% url 'teacher:update_teach' teacher.id %}" class="btn" style="color: var(--success);">Edit</a>
+                        <a href="{% url 'teacher:delete_teach' teacher.id %}" class="btn" style="color: var(--danger);">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
